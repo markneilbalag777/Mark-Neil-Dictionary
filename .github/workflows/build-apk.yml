@@ -41,7 +41,10 @@ jobs:
         run: |
           unzip -q Mark_Neil_Dictionary_Android_Project.zip -d source
           cd source/mark_neil_dictionary
+          python3 -c 'from pathlib import Path; p=Path("app/build.gradle.kts"); s=p.read_text(); old="    compileSdk = 35\n"; new="    compileSdk = 35\n    compileOptions {\n        sourceCompatibility = JavaVersion.VERSION_17\n        targetCompatibility = JavaVersion.VERSION_17\n    }\n    kotlinOptions {\n        jvmTarget = \"17\"\n    }\n"; assert old in s, "compileSdk line not found"; p.write_text(s.replace(old,new,1))'
           gradle --no-daemon assembleDebug
+
+
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
